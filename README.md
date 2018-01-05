@@ -1,7 +1,7 @@
 # GMM-spike-sorting
 Spike sorting with Gaussian mixture models
 
-The main function 'GMMsort.m' can open a GUI to perform spike sorting and to manually adjust the clusters. 
+The main function 'GMMsort.m' opens a GUI to perform spike sorting and to manually adjust the clusters. 
 
 Alternatively, the function can sort waveforms without opening the GUI (type 'help GMMsort' for help and examples). 
 In this case, it uses three other important functions: 
