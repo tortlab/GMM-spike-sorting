@@ -1,7 +1,7 @@
 function [] = plot_model(model,clusterid,features,dim)
 % PLOT_MODEL plots the Gaussians and feature points of the GMM model used
-%   to classify. MODEL and CLUSTERID variables are returned by the
-%   CLUSTERIZE function, while FEATURES are its input.
+%   to classify the data. MODEL and CLUSTERID variables are returned by
+%   the CLUSTERIZE function, while FEATURES are its input.
 %
 % 
 % B. C. Souza January, 2018
