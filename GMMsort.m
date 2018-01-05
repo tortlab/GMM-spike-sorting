@@ -1,28 +1,36 @@
 function [varargout] = GMMsort(varargin)
-% [] = GMMsort() opens the GUI to perform the classification
+% GMMsort Implements spike sorting using Gaussian mixture models (GMMs)
 % 
-% [MODEL, CLUSTERID, FEATURES] = GMMsort(X), where X is a matrix containing
-% the waveforms to be sorted (each line is a waveform) returns the fitted
-% GMM into MODEL and the cluster identity of each waveform in the vector
-% CLUSTERID.
+%     [] = GMMsort opens the GUI to perform the classification
 % 
-% [MODEL, CLUSTERID, FEATURES] = GMMsort(...,'nGauss', NGAUSS) where NGAUSS
-% is the number of Gaussians used to compute the unidimensional GMMs.
+%     [MODEL, CLUSTERID, FEATURES] = GMMsort(X), where X is a matrix
+%     containing the waveforms to be sorted (each line is a waveform),
+%     returns the fitted GMM into MODEL and the cluster identity of each
+%     waveform in the vector CLUSTERID.
 % 
-% [MODEL, CLUSTERID, FEATURES] = GMMsort(...,'nGaussClus', NGAUSSCLUS)
-% where NGAUSSCLUS is the number of Gaussians used to compute the
-% multidimensional GMMs, and thus, the maximum number of possible clusters.
+%     [MODEL, CLUSTERID, FEATURES] = GMMsort(X,'nGauss', NGAUSS) where
+%     NGAUSS is the number of Gaussians used to compute the unidimensional
+%     GMMs.
 % 
-% [MODEL, CLUSTERID, FEATURES] = GMMsort(...,'replicates', REPLICATES)
-% where REPLICATES is the number of times each unimodal GMM is repeated to
-% estimate the cluster separability of the feature.
+%     [MODEL, CLUSTERID, FEATURES] = GMMsort(X,'nGaussClus', NGAUSSCLUS)
+%     where NGAUSSCLUS is the number of Gaussians used to compute the
+%     multidimensional GMMs, and thus, the maximum number of possible
+%     clusters.
 % 
+%     [MODEL, CLUSTERID, FEATURES] = GMMsort(X,'replicates', REPLICATES)
+%     where REPLICATES is the number of times each unimodal GMM is repeated
+%     to estimate the cluster separability of the feature.
 % 
-% Example of GUI usage: Run GMMsort. Load DATA.mat. Press "Run Sorting".
-% Press "Clusters".
+%     [] = GMMsort('Option', OPTION) opens the
+%     GUI with the specified option value ('nGauss','nGaussClus',
+%     'replicates')
 % 
-% DATA.mat must have the spike times and waveforms in the following
-% structure:
+% Example of GUI usage: Run 'GMMsort'. 'Load' the file sample_waveforms.mat
+% and 'Run Sorting'. Edit the classification in the 'Clusters' window.
+% 
+% 'sample_waveforms.mat' contains the spike times and waveforms of the
+% reccorded neurons in a variable struct called 'data' with the following
+% fields:
 %   data.waveforms - a 1 by NCH cell vector, where NCH is the number of
 %       channels. Each cell must have a NSPK by N matrix, with NSPK
 %       waveforms of length N.
@@ -30,6 +38,9 @@ function [varargout] = GMMsort(varargin)
 %   data.spiketimes - a 1 by NCH cell vector, where NCH is the number of
 %       channels. Each cell must have a NSPK by 1 matrix, with NSPK spike
 %       times.
+% 
+% See detailed explanation of the GUI in the instruction file:
+% 'GMMinstruction.pdf'.
 % 
 % B. C. Souza January, 2018
 % Brain Institute, Natal, Brazil
@@ -54,33 +65,33 @@ parameters.nof_replicates	= 10;
 % maximum number of gaussians to overfit in multidim space. 12 for
 % single-wire. 20 for tetrodes.
 parameters.ngaussovfit      = 12;
+
+
+if ~isempty(varargin)
+    [REG,prop]=parseparams(varargin(2:end));
+    
+    idx=find(strcmpi('nGauss',prop));
+    
+    if ~isempty(idx)
+        parameters.maxGauss=prop{idx+1};
+    end
+    
+    idx=find(strcmpi('nGaussClus',prop));
+    if ~isempty(idx)
+        parameters.ngaussovfit=prop{idx+1};
+    end
+    
+    idx=find(strcmpi('replicates',prop));
+    if ~isempty(idx)
+        parameters.nof_replicates=prop{idx+1};
+    end
+end
 %%
 varargout={};
-if isempty(varargin)
-    
+if mod(length(varargin),2)==0
     GMMsort_gui
 else
     waveforms = varargin{1};
-    
-    if length(varargin)>1
-        [REG,prop]=parseparams(varargin(2:end));
-
-        idx=find(strcmpi('nGauss',prop));
-        
-        if ~isempty(idx)
-            parameters.maxGauss=prop{idx+1};
-        end
-        
-        idx=find(strcmpi('nGaussClus',prop));
-        if ~isempty(idx)
-            parameters.ngaussovfit=prop{idx+1};
-        end
-        
-        idx=find(strcmpi('replicates',prop));
-        if ~isempty(idx)
-            parameters.nof_replicates=prop{idx+1};
-        end
-    end
     
     features = extract_features(waveforms,parameters);
     

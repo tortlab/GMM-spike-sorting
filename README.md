@@ -6,8 +6,8 @@ The main function 'GMMsort.m' can open a GUI to perform spike sorting and to man
 Alternatively, the function can sort waveforms without opening the GUI (type 'help GMMsort' for help and examples). 
 In this case, it uses three other important functions: 
 
-    extract_features.m: perform the feature extraction with wavelet decomposition and weighted-PCA described in the manuscript.
-    clusterize.m:       estimate the number center of clusters and classify each sample using the extracted features.
+    extract_features.m: performs the feature extraction with wavelet decomposition and weighted-PCA described in the manuscript.
+    clusterize.m:       estimates the number and center of clusters and further classify each sample using the extracted features.
     plot_model.m:       plots the resultant classification.
 
 These functions can also be used separately (type 'help extract_features', 'help clusterize' or 'help plot_model' for more information)
