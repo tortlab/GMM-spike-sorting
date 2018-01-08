@@ -636,7 +636,7 @@ function GMM_ChangePlotAll(A,B)
         set(handles.Figures.Waveforms.PlotAllTOGGLE,'String','Plot <1000');
     else
         handles.Config.Plot = 1;
-        set(handles.Figures.Waveforms.PlotAllTOGGLE,'String','Plot all');
+        set(handles.Figures.Waveforms.PlotAllTOGGLE,'String','Plot all waveforms');
     end
     GMM_plotwaveforms
     if get(handles.Figures.Waveforms.DispClustersTOGGLE,'value')

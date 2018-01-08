@@ -24,7 +24,7 @@ axes(handles.Figures.Waveforms.unsortedspikes),cla
 auxplot = auxplot(:,isnan(handles.data.class_id{handles.chid}));
 plot(auxplot,'color',[1 1 1]*.9)
 axis tight
-% ylim(handles.Figures.Waveforms.ylim)
+ylim(handles.Figures.Waveforms.ylim)
 box off
 
 classlabels = unique(handles.data.class_id{handles.chid});
@@ -182,8 +182,9 @@ end
 
 plot(handles.Figures.Waveforms.cluster{class_i},auxplot,'color',...
     handles.dataaux.class_colors(class_i,:))
-set(handles.Figures.Waveforms.cluster{class_i},'box', 'off', 'ylim',handles.Figures.Waveforms.ylim)
 axis(handles.Figures.Waveforms.cluster{class_i},'tight');
+set(handles.Figures.Waveforms.cluster{class_i},'box', 'off', 'ylim',handles.Figures.Waveforms.ylim)
+
 
 end
 
