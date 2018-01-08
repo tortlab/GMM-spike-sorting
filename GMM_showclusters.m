@@ -1227,9 +1227,9 @@ switch optionsstr{optionselected}
         auxplotprc = prctile(auxplot',[5,25,50,75,95]);
         vecwidth = [1 2 4 2 1];
 
+        hold(handles.Figures.Clusters.subplots(2),'on')
         for i = 1:size(auxplotprc,1)
-            hold on
-            plot(auxplotprc(i,:),'color',...
+            plot(handles.Figures.Clusters.subplots(2),auxplotprc(i,:),'color',...
                 handles.dataaux.class_colors(class_i,:),'linewidth',...
                 vecwidth(i))
         end
