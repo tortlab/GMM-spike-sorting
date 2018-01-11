@@ -3,7 +3,7 @@ function [model, clusterid] = clusterize(features,parameters)
 % and overclustering.
 %  
 %   [MODEL, CLUSTERID] = CLUSTERIZE(FEATURES,PARAMETERS) where FEATURES is
-%   a N-by-M matrix with N samples of M features, and PARAMETERS is a
+%   an N-by-M matrix with N samples of M features, and PARAMETERS is a
 %   struct containing the fields:
 % 
 %         ngaussovfit: Number of Gaussians used in the GMM. 
@@ -17,8 +17,7 @@ function [model, clusterid] = clusterize(features,parameters)
 %   The function returns:
 %
 %         MODEL: a struct with the mean (mu), covariance matrix (S) and
-%         weight (alpha) of
-%             the fitted Gaussians.
+%         weight (alpha) of the fitted Gaussians.
 % 
 %         CLUSTERID: the identity of each sample according to the
 %             classification of the model.
