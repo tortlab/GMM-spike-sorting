@@ -41,9 +41,10 @@ function [varargout] = GMMsort(varargin)
 % 
 % See detailed explanation of the GUI in the instruction file:
 % 'GMMinstruction.pdf'.
-% 
-% B. C. Souza January, 2018
-% Brain Institute, Natal, Brazil
+%
+% B. C. Souza,
+% Brain Institute, Natal, Brazil,
+% January, 2018.
 
 
 
