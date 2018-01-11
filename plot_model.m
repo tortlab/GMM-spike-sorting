@@ -4,8 +4,9 @@ function [] = plot_model(model,clusterid,features,dim)
 %   the CLUSTERIZE function, while FEATURES are its input.
 %
 % 
-% B. C. Souza January, 2018
-% Brain Institute, Natal, Brazil
+% B. C. Souza,
+% Brain Institute, Natal, Brazil,
+% January, 2018.
 
 dimx=dim(1);
 dimy=dim(2);
