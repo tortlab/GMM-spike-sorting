@@ -3,7 +3,7 @@ function [features] = extract_features(waveforms,parameters,varargin)
 % mixture models (GMMs) wavelet decomposition and weighted PCA (wPCA).
 %  
 %   [FEATURES] = EXTRACT_FEATURES(WAVEFORMS,PARAMETERS) where WAVEFORMS is
-%   a N-by-M matrix with N waveforms of M points, and PARAMETERS is a
+%   an N-by-M matrix with N waveforms of M points, and PARAMETERS is a
 %   struct containing the fields:
 % 
 %         maxGauss: Number of Gaussians used in the GMM.
