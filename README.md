@@ -13,9 +13,9 @@ These functions can also be used separately (type 'help extract_features', 'help
 The file 'GMMinstructions.pdf' gives instructions for using the GUI.
 
 
-B. C. Souza
+B. C. Souza,
 
-Brain Institute, Natal, Brazil
+Brain Institute, Natal, Brazil,
 
 January, 2018.
 
