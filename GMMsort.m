@@ -29,14 +29,14 @@ function [varargout] = GMMsort(varargin)
 % and 'Run Sorting'. Edit the classification in the 'Clusters' window.
 % 
 % 'sample_waveforms.mat' contains the spike times and waveforms of the
-% reccorded neurons in a variable struct called 'data' with the following
+% recorded neurons in a variable struct called 'data' with the following
 % fields:
 %   data.waveforms - a 1 by NCH cell vector, where NCH is the number of
-%       channels. Each cell must have a NSPK by N matrix, with NSPK
+%       channels. Each cell must have an NSPK by N matrix, with NSPK
 %       waveforms of length N.
 % 
 %   data.spiketimes - a 1 by NCH cell vector, where NCH is the number of
-%       channels. Each cell must have a NSPK by 1 matrix, with NSPK spike
+%       channels. Each cell must have an NSPK by 1 matrix, with NSPK spike
 %       times.
 % 
 % See detailed explanation of the GUI in the instruction file:
