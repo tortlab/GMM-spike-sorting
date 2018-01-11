@@ -23,9 +23,9 @@ function [model, clusterid] = clusterize(features,parameters)
 %             classification of the model.
 % 
 % 
-%  
-% B. C. Souza January, 2018
-% Brain Institute, Natal, Brazil
+% B. C. Souza,
+% Brain Institute, Natal, Brazil,
+% January, 2018.
 
 %%
 
