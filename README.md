@@ -10,11 +10,13 @@ In this case, it uses three other important functions:
     clusterize.m:       estimates the number and center of clusters and further classify each sample using the extracted features.
     plot_model.m:       plots the resultant classification.
 
-These functions can also be used separately (type 'help extract_features', 'help clusterize' or 'help plot_model' for more information)
+These functions can also be used separately (type 'help extract_features', 'help clusterize' or 'help plot_model' for more information).
 
 The file 'GMMinstructions.pdf' gives instructions for using the GUI.
 
 
-B. C. Souza January, 2018
+B. C. Souza
 
 Brain Institute, Natal, Brazil
+
+January, 2018.
