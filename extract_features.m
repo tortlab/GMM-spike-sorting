@@ -25,9 +25,9 @@ function [features] = extract_features(waveforms,parameters,varargin)
 %         coefficients computed using the separability metric defined.
 % 
 %  
-% B. C. Souza January, 2018
-% Brain Institute, Natal, Brazil
-
+% B. C. Souza,
+% Brain Institute, Natal, Brazil,
+% January, 2018.
 
 % % % % % % % % % %
 % choose the separability metric to perform wPCA
