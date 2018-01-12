@@ -282,10 +282,11 @@ handles.Figures.Waveforms.UnsortedPanel = ...
     'Position',positionaux);
 %     'Position',[.0 .015 .275 .45]);
 
-positionaux = [0.025 .5 .18 .325];
-% positionaux = [0.015 .5 .2 .375];
+% positionaux = [0.025 .5 .18 .325];
+positionaux = [0.08 .08 .9 .9];
 handles.Figures.Waveforms.unsortedspikes = ...
-    subplot('Position',positionaux);
+    axes('Parent',handles.Figures.Waveforms.UnsortedPanel,'Position',positionaux);
+%     subplot('Position',positionaux);
 
 
 
@@ -300,7 +301,7 @@ for class_i = 1:7
         positionaux = [0.05+class_i*0.25 .5 .22 .375];
         positionaux=positionaux-positionmod;
         handles.Figures.Waveforms.cluster{class_i} = ...
-            subplot('Position',positionaux);
+            axes('Parent',handles.Figures.Waveforms.main,'Position',positionaux);
         
         positionaux = [0.055+class_i*0.25 .875 .025 .026];
         positionaux=positionaux-positionmod;
@@ -470,7 +471,10 @@ function [ ] = GMM_ChangeClusterNumber( A,B )
 
 global handles
 
-aux = cell2mat(handles.Figures.Waveforms.clusterNUMB)==A;
+% aux = cell2mat(handles.Figures.Waveforms.clusterNUMB)==A;
+myfun = @(x) isequal(x,A);
+aux = cellfun(myfun, handles.Figures.Waveforms.clusterNUMB);
+
 new_class = str2num(get(handles.Figures.Waveforms.clusterNUMB{aux},'string'));
 old_class = (get(handles.Figures.Waveforms.clusterPOPUP{aux},'value'));
 
@@ -510,7 +514,10 @@ function [ ] = GMM_ChangeDisplayedCluster( A,B )
 
 global handles
 
-aux = cell2mat(handles.Figures.Waveforms.clusterPOPUP)==A;
+% aux = cell2mat(handles.Figures.Waveforms.clusterPOPUP)==A;
+myfun = @(x) isequal(x,A);
+aux = cellfun(myfun, handles.Figures.Waveforms.clusterPOPUP);
+
 axes(handles.Figures.Waveforms.cluster{aux}),cla
 
 GMM_ChangeVisualization(handles.Figures.Waveforms.clusterTOGGLE{aux})
@@ -527,7 +534,10 @@ function [ ] = GMM_ChangeVisualization( A,B )
 
 global handles
 
-aux = cell2mat(handles.Figures.Waveforms.clusterTOGGLE)==A;
+% aux = cell2mat(handles.Figures.Waveforms.clusterTOGGLE)==A;
+myfun = @(x) isequal(x,A);
+aux = cellfun(myfun, handles.Figures.Waveforms.clusterTOGGLE);
+
 class_i = get(handles.Figures.Waveforms.clusterPOPUP{aux},'value');
 
 axes(handles.Figures.Waveforms.cluster{aux})
@@ -603,21 +613,27 @@ function [ ] = GMM_deletecluster(A,B )
 
 global handles
 
-aux = cell2mat(handles.Figures.Waveforms.delBUTTON)==A;
+% aux = cell2mat(handles.Figures.Waveforms.delBUTTON)==A;
+myfun = @(x) isequal(x,A);
+aux = cellfun(myfun, handles.Figures.Waveforms.delBUTTON);
+
+
 class_i = get(handles.Figures.Waveforms.clusterPOPUP{aux},'value');
-
-handles.data.model{handles.chid}.class(handles.data.model{handles.chid}.class==class_i)=nan;
-
+try
+    handles.data.model{handles.chid}.class(handles.data.model{handles.chid}.class==class_i)=nan;
+end
 clusterid = handles.data.class_id{handles.chid};
 clusterid(clusterid==class_i)=nan;
 
 clusterlabels = unique(clusterid(~isnan(clusterid)));
 
-for i = 1:length(clusterlabels);
+for i = 1:length(clusterlabels)
     
     clusspikes = clusterid==clusterlabels(i);
     handles.data.class_id{handles.chid}(clusspikes) = i;
-    handles.data.model{handles.chid}.class(handles.data.model{handles.chid}.class==clusterlabels(i))=i;
+    try
+        handles.data.model{handles.chid}.class(handles.data.model{handles.chid}.class==clusterlabels(i))=i;
+    end
 end
 handles.data.class_id{handles.chid}(isnan(clusterid))=nan;
 

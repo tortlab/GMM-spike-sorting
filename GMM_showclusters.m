@@ -974,7 +974,10 @@ function [] = GMM_startpolygon(A,B)
 
 global handles
 
-
+try
+    delete(handles.Figures.Clusters.polygonhandle)
+    delete(handles.Figures.Clusters.inpolygonhandle)
+end
 GMM_setselectedspks(zeros(length(handles.data.class_id{handles.chid}),1)==1);
 
 set(handles.Figures.Clusters.startpolygon,'Enable','off') 
@@ -1118,14 +1121,6 @@ end
 function [] = GMM_setselectedspks(spks)
     global handles
     handles.Figures.Clusters.SelectedSpks = spks;
-    
-    try
-        delete(handles.Figures.Clusters.polygonhandle)
-        delete(handles.Figures.Clusters.inpolygonhandle)
-    catch
-        
-    end
-
     
     GMM_change_bck_template(handles.Figures.Clusters.selectedBKGNtemplateH)
 end

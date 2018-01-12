@@ -19,7 +19,9 @@ figure(handles.Figures.Waveforms.main)
 
 auxplot = handles.data.waveforms{handles.chid}';
 handles.Figures.Waveforms.ylim = minmax(reshape(auxplot(:,~isnan(handles.data.class_id{handles.chid})),1,[]));
-
+if sum(~isnan(handles.data.class_id{handles.chid}))==0   
+    handles.Figures.Waveforms.ylim = minmax(reshape(auxplot(:,:),1,[]));
+end
 axes(handles.Figures.Waveforms.unsortedspikes),cla
 auxplot = auxplot(:,isnan(handles.data.class_id{handles.chid}));
 plot(auxplot,'color',[1 1 1]*.9)
