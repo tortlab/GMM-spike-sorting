@@ -371,7 +371,7 @@ for class_i = 1:7
         positionaux = [0.05+(class_i-4)*0.25 .05 .22 .375];
         positionaux=positionaux-positionmod;
         handles.Figures.Waveforms.cluster{class_i} = ...
-            subplot('Position',positionaux);
+            axes('Parent',handles.Figures.Waveforms.main,'Position',positionaux);
         
         
         positionaux = [0.055+(class_i-4)*0.25 .425 .025 .026];

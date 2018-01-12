@@ -150,7 +150,9 @@ handles.Figures.Clusters.changevisualizationBUTTON = uicontrol('units','normaliz
 
 
 if isfield(handles.Figures.Clusters,'viewspikesVector')
-    set(handles.Figures.Clusters.viewspikesList,'value',handles.Figures.Clusters.viewspikesVector)
+    if sum(~isnan(handles.Figures.Clusters.viewspikesVector))
+        set(handles.Figures.Clusters.viewspikesList,'value',handles.Figures.Clusters.viewspikesVector)
+    end
 else
     set(handles.Figures.Clusters.viewspikesList,'value',nclasses+1)
     handles.Figures.Clusters.viewspikesVector = classlabels;
@@ -1029,10 +1031,10 @@ switch handles.Figures.Clusters.mode_status
         spikes =zeros(size(handles.data.class_id{handles.chid}));
         getspikesfrom = handles.Figures.Clusters.viewspikesVector;
         
-        for class_i = getspikesfrom(:)';
+        for class_i = getspikesfrom(:)'
             spikes = spikes | handles.data.class_id{handles.chid}==class_i;
         end
-        if isempty(getspikesfrom)
+        if isempty(getspikesfrom)||isnan(getspikesfrom)
             spikes = ~spikes;
         end
         %%

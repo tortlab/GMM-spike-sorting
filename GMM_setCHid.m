@@ -28,7 +28,7 @@ elseif chid>handles.dataaux.nchannels
 else
     handles.chid = chid;
     
-    handles.Figures.Clusters.viewspikesVector=unique(handles.data.class_id{handles.chid});
+    handles.Figures.Clusters.viewspikesVector=unique(handles.data.class_id{handles.chid}(~isnan(handles.data.class_id{handles.chid})));
 
     GMM_plotwaveforms
     if get(handles.Figures.Waveforms.DispClustersTOGGLE,'value') 
