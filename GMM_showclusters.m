@@ -1034,7 +1034,7 @@ switch handles.Figures.Clusters.mode_status
         for class_i = getspikesfrom(:)'
             spikes = spikes | handles.data.class_id{handles.chid}==class_i;
         end
-        if isempty(getspikesfrom)||isnan(getspikesfrom)
+        if isempty(getspikesfrom) | isnan(getspikesfrom)
             spikes = ~spikes;
         end
         %%
