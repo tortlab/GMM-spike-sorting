@@ -19,4 +19,5 @@ Brain Institute, Natal, Brazil,
 
 January, 2018.
 
-Reference: Souza et al., Spike sorting with Gaussian mixture models. Under preparation.
+Reference: Souza BC, Lopes-dos-Santos V, Bacelo J, Tort AB. Spike sorting with Gaussian mixture models. BioRxiv 2018.
+https://doi.org/10.1101/248864.
