@@ -1,5 +1,5 @@
 data:
-  root_folder: /home/bryancsouza/bryancsouza@neuro.ufrn.br/Functions/GMMSort_Py/
+  root_folder: ./Integrating with YASS/examples/data
   recordings: neuropixel.bin
   geometry: neuropixel_channels.npy
 
