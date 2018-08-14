@@ -672,7 +672,7 @@ def score_features(features, idx_local, idx, rot, channel_index, spike_index, fe
     
     return scores, spike_index, feature_index
 
-def gmm_weight3(wvcoeff, gmm_params, spike_index):
+def gmm_weight(wvcoeff, gmm_params, spike_index):
     
     if 'max_samples' in gmm_params.keys():
         max_n_sample = gmm_params['max_samples']
