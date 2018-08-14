@@ -17,7 +17,6 @@ import os.path
 
 from yass.batch import BatchProcessor, util
 from yass.util import check_for_files, LoadFile, save_numpy_object
-from yass.detect import gmm_weight
 
 logger = logging.getLogger(__name__)
 
@@ -138,11 +137,9 @@ def pca(path_to_data, dtype, n_channels, data_order, recordings, spike_index,
     logger.info('Computing weights..')
     
     # Weighting the features using metric defined in gmtype
-    #weights = gmm_weight2(features, gmm_params)
-    weights = gmm_weight3(features, gmm_params, spike_index)
+    weights = gmm_weight(features, gmm_params, spike_index)
     wfeatures =  features*weights
     
-    #wfeatures = gmm_weight.run(features, gmtype, param=None)
     n_features = wfeatures.shape[FEATURE]
     wfeatures_lin = np.reshape(wfeatures,(wfeatures.shape[WAVE]*n_features,
                                           wfeatures.shape[CH]))
