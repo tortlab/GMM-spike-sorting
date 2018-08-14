@@ -13,6 +13,6 @@ This script relates to the 'yass.pipeline.run' method. Mainly, it replaces the c
     
 #### Run the yass calling 'yass.detect.wpca.run' instead of 'yass.detect.run' (see example bellow)
 
-[1] Souza, B.C., Lopes-dos-Santos, V., Bacelo, J. & Tort, A.B.L. (2018). Spike sorting with Gaussian mixture models. bioRxiv.
+[1] Souza, B.C., Lopes-dos-Santos, V., Bacelo, J. & Tort, A.B.L. (2018). Spike sorting with Gaussian mixture models. bioRxiv. https://doi.org/10.1101/248864.
 
 [2] Lee, J.H., Carlson, D.E., Razaghi, H.S., Yao, W., Goetz, G.A., Hagen, E., ... & Paninski, L. (2017). Yass: Yet another spike sorter. In Advances in Neural Information Processing Systems (pp. 4002-4012).
