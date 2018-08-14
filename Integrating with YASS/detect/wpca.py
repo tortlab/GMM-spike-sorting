@@ -18,8 +18,6 @@ from yass import neuralnetwork
 from yass.preprocess import whiten
 from yass.geometry import n_steps_neigh_channels
 from yass.util import file_loader, save_numpy_object, load_logging_config_file
-from yass.detect import gmm_dwt 
-from yass.detect import gmm_weight
 
     
 logger = logging.getLogger(__name__)
@@ -75,7 +73,7 @@ def run(standarized_path, standarized_params,
     gmm_params is a dictionary with the following keys (use None to default
     values):
         gmtype: str
-         One of 'idist', 'iinf' or 'ipeak'. Control which separability metric to 
+         One of 'idist', 'iinf' or 'ipeak'. Controls which separability metric to 
          use. See [1] for further details.
         max_samples: int, optional
          Define the number of samples that will be used to compute the Gaussian
