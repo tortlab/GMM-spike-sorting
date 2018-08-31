@@ -3,7 +3,7 @@
 
 The following script adapts the feature extraction step described in [1] to the Yass spike sorting algorithm [2]. 
 
-Briefly, it replaces the PCA step by a wavelet decomposition followed by a weighted-PCA. The weigths are defined using one of the 3 separability metrics discribed in [1].
+Briefly, it replaces the PCA step by a wavelet decomposition followed by a weighted-PCA. The weights are defined using one of the 3 separability metrics described in [1].
 
 This script relates to the 'yass.pipeline.run' method. Mainly, it replaces the call for yass.detect.run to yass.detect.wpca.run. To use this pipeline see the following steps:
 
