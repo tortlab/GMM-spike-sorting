@@ -9,9 +9,9 @@ This script relates to the 'yass.pipeline.run' method. Mainly, it replaces the c
 
 #### Install Yass-0.9 from https://github.com/paninski-lab/yass. 
 
-#### In the 'yass/detect/' folder add the 'wpca.py' routine from the GMMSort repository: https://github.com/tortlab/GMM-spike-sorting. In the 'yass/threshold' folder add also the 'dimension_reduction_wpca.py'.
+#### In the 'yass/detect/' folder add the 'wpca.py' routine from the GMMSort repository: https://github.com/tortlab/GMM-spike-sorting. In the 'yass/threshold' folder, add also the 'dimension_reduction_wpca.py'.
     
-#### Run the yass calling 'yass.detect.wpca.run' instead of 'yass.detect.run' (see example bellow)
+#### Run the yass calling 'yass.detect.wpca.run' instead of 'yass.detect.run' (see example below)
 
 [1] Souza, B.C., Lopes-dos-Santos, V., Bacelo, J. & Tort, A.B.L. (2018). Spike sorting with Gaussian mixture models. bioRxiv. https://doi.org/10.1101/248864.
 
