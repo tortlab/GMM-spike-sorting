@@ -81,6 +81,9 @@ def pca(path_to_data, dtype, n_channels, data_order, recordings, spike_index,
     max_memory:
         Max memory to use in each batch (e.g. 100MB, 1GB)
 
+    gmm_params:
+        Dictionary with the parameters of the Gaussian mixture model
+        
     output_path: str, optional
         Directory to store the scores and rotation matrix, if None, previous
         results on disk are ignored, operations are computed and results
@@ -128,10 +131,13 @@ def pca(path_to_data, dtype, n_channels, data_order, recordings, spike_index,
     
     logger.info('Computing Wavelets ...')
     feature = bp.multi_channel_apply(wavedec, mode='memory',
+                                   pass_batch_info=True,
                                    spike_index=spike_index,
                                    spike_size=spike_size,
                                    wvtype = 'haar')
-    features = reduce(lambda x, y: np.concatenate(x, y), [f for f in feature])
+    
+    
+    features = reduce(lambda x, y: np.concatenate((x, y)), [f for f in feature])
     
     
     logger.info('Computing weights..')
@@ -163,6 +169,7 @@ def pca(path_to_data, dtype, n_channels, data_order, recordings, spike_index,
     
     logger.info('Computing PCA sufficient statistics...')
     stats = bp_feat.multi_channel_apply(suff_stat_features, mode='memory',
+                                  pass_batch_info=True,
                                   spike_index=spike_index,
                                   spike_size=spike_size,
                                   feature_index=feature_index,
@@ -236,7 +243,19 @@ def writefile(var, output_path):
                                 output_path)
     return params
 
-def wavedec(recordings, spike_index, spike_size, wvtype = 'haar'):
+def wavedec(recordings, idx_local, idx, spike_index, spike_size, wvtype = 'haar'):
+    
+    
+    data_start = idx[0].start
+    data_end = idx[0].stop
+    # get offset that will be applied
+    offset = idx_local[0].start
+
+    spike_time = spike_index[:, 0]
+    spike_index = spike_index[np.logical_and(spike_time >= data_start,
+                                             spike_time < data_end)]
+    spike_index[:, 0] = spike_index[:, 0] - data_start + offset
+    
     
     # column ids for index matrix
     SPIKE_TIME, MAIN_CHANNEL = 0, 1
@@ -247,24 +266,32 @@ def wavedec(recordings, spike_index, spike_size, wvtype = 'haar'):
     window_size = len(window_idx)
     
     n_obs, n_channels = recordings.shape
+
+    
+    spike_times = spike_index[:,SPIKE_TIME];
+    
+    spike_times = spike_times[np.logical_and(
+            (spike_times > spike_size),
+            (spike_times < n_obs - spike_size - 1))]
     
     c=0
     
     # computing coefficients for a single waveform
-    coeffs = pywt.wavedec(recordings[spike_index[0,SPIKE_TIME]+window_idx,c],
+    coeffs = pywt.wavedec(recordings[spike_times[0]+window_idx,c],
                  wv, mode='constant')
     
     n_features = len(np.hstack(coeffs))
-    n_wave = spike_index.shape[0]
+    n_wave = spike_times.shape[0]
+    
     
     # preallocating coeffs
     coeffs = np.zeros((n_wave,n_features,n_channels))
 
-    
+        
     for c in range(n_channels):
         wave = np.zeros((n_wave,window_size))
         for j in range(window_size):
-            wave[:,j] = recordings[spike_index[:,SPIKE_TIME]+window_idx[j],c]
+            wave[:,j] = recordings[spike_times+window_idx[j],c]
         
         coeff = pywt.wavedec(wave, wv, mode='constant')
     
@@ -277,7 +304,8 @@ def wavedec(recordings, spike_index, spike_size, wvtype = 'haar'):
     
     return coeffs
 
-def suff_stat_features(features, spike_index, spike_size, feature_index, feature_size):
+
+def suff_stat_features(features, idx_local, idx, spike_index, spike_size, feature_index, feature_size):
     """
     Get PCA SS matrix of extracted features per recording 
     channel
@@ -307,9 +335,26 @@ def suff_stat_features(features, spike_index, spike_size, feature_index, feature
     """
     
     
+    data_start = idx[0].start
+    data_end = idx[0].stop
+    # get offset that will be applied
+    offset = idx_local[0].start
+
+    spike_time = spike_index[:, 0]
+    
+    spike_index = spike_index[np.logical_and(feature_index >= data_start,
+                                             feature_index < data_end)]
+#     spike_index[:, 0] = spike_index[:, 0] - data_start + offset
+       
+    feature_index = feature_index[np.logical_and(feature_index >= data_start,
+                                             feature_index < data_end)]
+    
+    feature_index = feature_index - data_start + offset
+    
     # column ids for index matrix
     SPIKE_TIME, MAIN_CHANNEL = 0, 1
 
+    
     n_obs, n_channels = features.shape
     
     window_idx = range(0, feature_size)
@@ -324,6 +369,7 @@ def suff_stat_features(features, spike_index, spike_size, feature_index, feature
         channel_spike_times = feature_index[spike_index[:, MAIN_CHANNEL] == c]
 
         channel_spikes = len(channel_spike_times)
+        
 
         # create zeros matrix (window size x number of spikes for this channel)
         wf_temp = np.zeros((window_size, channel_spikes))
@@ -701,8 +747,11 @@ def gmm_weight(wvcoeff, gmm_params, spike_index):
         
     if 'gmtype' in gmm_params.keys():
         gmtype = gmm_params['gmtype']
+        
+        logger.info('Using ' + gmtype + ' metric to weight features..')
     else:
         gmtype = 'idist'
+        logger.info('Using distance (idist) metric to weight features..')
 
     gm = mix.GaussianMixture(covariance_type='full',max_iter=max_iter, n_components=n_components,n_init=1)
     
@@ -710,6 +759,7 @@ def gmm_weight(wvcoeff, gmm_params, spike_index):
     weight=np.zeros((replicates, wvcoeff.shape[1], wvcoeff.shape[2]))
     for ich in range(wvcoeff.shape[2]):
         
+        logger.info('Computing weights for channel '+ str(ich) +'..')
         if use_channel_features:
             idx = np.where(spike_index[:,1]==ich)
 
@@ -735,7 +785,7 @@ def gmm_weight(wvcoeff, gmm_params, spike_index):
         coeff_norm = st.zscore(coeff_channel,axis=0)
         for irep in range(replicates):
             if gmtype=='idist':
-                logger.info('Using distance (idist) metric to weight features..')
+                
 
                 for icoeff in range(coeff_norm.shape[1]):
                     gm.fit(coeff_norm[:,icoeff,ich].reshape(-1,1))
@@ -750,7 +800,6 @@ def gmm_weight(wvcoeff, gmm_params, spike_index):
 
 
             elif gmtype=='ipeak':
-                logger.info('Using peak (ipeak) metric to weight features..')
                 for icoeff in range(coeff_norm.shape[1]):
                     gm.fit(coeff_norm[:,icoeff,ich].reshape(-1,1))
                     model_p = gm.score_samples(np.linspace(np.min(coeff_norm[:,icoeff,ich]),
@@ -760,8 +809,7 @@ def gmm_weight(wvcoeff, gmm_params, spike_index):
                     weight[irep,icoeff,ich] = np.sum(model_p[idx])/np.max(model_p)
 
             elif gmtype=='iinf':
-
-                logger.info('Using inflection (iinf) metric to weight features..')
+                #logger.info('Using inflection (iinf) metric to weight features..')
                 for icoeff in range(coeff_norm.shape[1]):
                     gm.fit(coeff_norm[:,icoeff,ich].reshape(-1,1))
                     model_p = gm.score_samples(np.linspace(np.min(coeff_norm[:,icoeff,ich]),
@@ -772,7 +820,6 @@ def gmm_weight(wvcoeff, gmm_params, spike_index):
                     weight[irep,icoeff,ich] = np.sum(model_p[idx])/np.max(model_p)
 
             else:
-
                 logger.info('Incorrect gmtype identifier. Use gmtype= "idist", "ipeak" or "iinf"')
 
     
