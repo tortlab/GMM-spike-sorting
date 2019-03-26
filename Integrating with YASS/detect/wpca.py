@@ -210,8 +210,8 @@ def run_threshold(standarized_path, standarized_params, channel_index,
                                standarized_params['data_order'],
                                recordings,
                                clear,
-                               25,#CONFIG.spike_size,
-                               3,#CONFIG.detect.temporal_features,
+                               CONFIG.spike_size,
+                               CONFIG.detect.temporal_features,
                                CONFIG.neigh_channels,
                                channel_index,
                                CONFIG.resources.max_memory,
@@ -230,8 +230,7 @@ def run_threshold(standarized_path, standarized_params, channel_index,
 
     
     # apply whitening to scores
-    """scores_clear = whiten.score(pca_scores, clear[:, 1], whiten_filter)"""
-
+#     scores_clear = whiten.score(pca_scores, clear[:, 1], whiten_filter)
     scores_clear = pca_scores
     
     if TMP_FOLDER is not None:
@@ -239,6 +238,9 @@ def run_threshold(standarized_path, standarized_params, channel_index,
         path_to_scores = os.path.join(TMP_FOLDER, filename_scores_clear)
         save_numpy_object(scores_clear, path_to_scores, if_file_exists,
                           name='scores')
+        
+#         save_numpy_object(pca_scores, path_to_scores, if_file_exists,
+#                           name='scores')
 
         # save spike_index_all (same as spike_index_clear for threshold
         # detector)
@@ -253,8 +255,13 @@ def run_threshold(standarized_path, standarized_params, channel_index,
         scores = get_locations_features_threshold(scores_clear, clear[:, 1],
                                                   channel_index,
                                                   CONFIG.geom)
+#         scores = get_locations_features_threshold(pca_scores, clear[:, 1],
+#                                                   channel_index,
+#                                                   CONFIG.geom)
     else:
         scores = scores_clear
+#         scores = pca_scores
+        
     return scores, clear, np.copy(clear)
 
 
